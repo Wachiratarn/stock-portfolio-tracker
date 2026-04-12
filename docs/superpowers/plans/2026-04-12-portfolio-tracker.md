@@ -72,14 +72,16 @@ dist/
 - [ ] **Step 3: Create `requirements.txt` (dev only — not deployed to Lambda)**
 
 ```
-pytest==8.3.5
-pytest-cov==5.0.0
-moto[s3]==5.0.27
-boto3==1.34.162
-yfinance==0.2.54
-pandas==2.2.3
-pyarrow==17.0.0
+pytest==9.0.3
+pytest-cov==7.1.0
+moto[s3]==5.1.22
+boto3==1.42.84
+yfinance==1.2.1
+pandas==3.0.2
+pyarrow==23.0.1
 ```
+
+> Note: pandas 3.0 is a major version bump from 2.x. The Lambda code is unaffected, but if any test helper breaks on `freq="B"` in `pd.date_range`, replace it with `freq="bday"` (the new alias in pandas 3.0+).
 
 - [ ] **Step 4: Install dev dependencies**
 
@@ -229,7 +231,7 @@ from prices import fetch_prices
 
 def _make_ohlcv(n: int = 5) -> pd.DataFrame:
     """Single-ticker flat DataFrame — what yf.download returns for one ticker."""
-    idx = pd.date_range("2025-01-02", periods=n, freq="B")
+    idx = pd.date_range("2025-01-02", periods=n, freq="bday")
     return pd.DataFrame(
         {
             "Open":   [100.0] * n,
