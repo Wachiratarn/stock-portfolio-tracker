@@ -6,6 +6,8 @@ A serverless AWS data pipeline that fetches daily US stock prices, stores them a
 ![AWS Lambda](https://img.shields.io/badge/AWS-Lambda%20%7C%20S3%20%7C%20Athena%20%7C%20EventBridge-FF9900?logo=amazonwebservices&logoColor=white)
 ![Power BI](https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?logo=powerbi&logoColor=black)
 
+![Power BI overview: portfolio KPIs, weight by ticker, and per-holding P&L](docs/images/overview.png)
+
 ## Architecture
 
 ```
@@ -61,6 +63,14 @@ The report is in [`powerbi/portfolio.pbix`](powerbi/portfolio.pbix).
 - **Overview:** KPI cards for Market Value, Cost Basis, Unrealized P&L and P&L %, a portfolio-weight donut chart, and a per-holding summary table.
 - **Performance:** price return % over time per ticker, P&L % by ticker, market value vs cost basis, and a date slicer.
 - **Holdings:** a ticker drill-down with the latest close, position KPIs, a daily OHLCV table and a close-price trend.
+
+**Performance**
+
+![Performance page: price return over time, P&L % by ticker, market value vs cost basis](docs/images/performance.png)
+
+**Holdings**
+
+![Holdings page: ticker drill-down with daily OHLCV and close-price trend](docs/images/holdings.png)
 
 ## Repository layout
 
