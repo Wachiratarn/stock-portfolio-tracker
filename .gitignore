@@ -1,1 +1,12 @@
 .worktrees/
+__pycache__/
+*.pyc
+.pytest_cache/
+layer/
+lambda-layer.zip
+.env
+*.egg-info/
+dist/
+.venv/
+*.zip
+.superpowers/

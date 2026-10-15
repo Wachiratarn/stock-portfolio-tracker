@@ -12,9 +12,9 @@ from storage import is_first_run, write_parquet
 def _sample_df():
     return pd.DataFrame([
         {
-            "ticker": "AAPL", "date": date(2025, 1, 2),
-            "open": 100.0, "high": 105.0, "low": 98.0,
-            "close": 102.0, "volume": 1_000_000,
+            "ticker": "AAPL", "trade_date": date(2025, 1, 2),
+            "open_price": 100.0, "high_price": 105.0, "low_price": 98.0,
+            "close_price": 102.0, "volume": 1_000_000,
         }
     ])
 
@@ -39,23 +39,36 @@ def test_is_first_run_false_when_files_exist(mock_client):
 def test_write_parquet_returns_correct_s3_key(mock_client):
     mock_s3 = MagicMock()
     mock_client.return_value = mock_s3
+    mock_s3.list_objects_v2.return_value = {"KeyCount": 0}
     mock_s3.put_object.return_value = {}
 
     key = write_parquet(_sample_df(), "my-bucket", run_date=date(2025, 4, 11))
-    assert key == "prices/year=2025/month=04/day=11/prices.parquet"
+    assert key == "prices/y=2025/m=04/d=11/prices.parquet"
 
 
 @patch("storage.boto3.client")
 def test_write_parquet_calls_put_object(mock_client):
     mock_s3 = MagicMock()
     mock_client.return_value = mock_s3
+    mock_s3.list_objects_v2.return_value = {"KeyCount": 0}
     mock_s3.put_object.return_value = {}
 
     write_parquet(_sample_df(), "my-bucket", run_date=date(2025, 4, 11))
     mock_s3.put_object.assert_called_once()
     call_kwargs = mock_s3.put_object.call_args[1]
     assert call_kwargs["Bucket"] == "my-bucket"
-    assert call_kwargs["Key"] == "prices/year=2025/month=04/day=11/prices.parquet"
+    assert call_kwargs["Key"] == "prices/y=2025/m=04/d=11/prices.parquet"
+
+
+@patch("storage.boto3.client")
+def test_write_parquet_skips_existing_partition(mock_client):
+    mock_s3 = MagicMock()
+    mock_client.return_value = mock_s3
+    mock_s3.list_objects_v2.return_value = {"KeyCount": 1}
+
+    key = write_parquet(_sample_df(), "my-bucket", run_date=date(2025, 4, 11))
+    assert key == "prices/y=2025/m=04/d=11/prices.parquet"
+    mock_s3.put_object.assert_not_called()
 
 
 @patch("storage.boto3.client")

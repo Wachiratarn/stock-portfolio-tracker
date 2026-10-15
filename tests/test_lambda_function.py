@@ -10,12 +10,12 @@ from lambda_function import lambda_handler
 
 def _sample_df():
     return pd.DataFrame([
-        {"ticker": "AAPL", "date": date(2025, 1, 2), "open": 100.0,
-         "high": 105.0, "low": 98.0, "close": 102.0, "volume": 1_000_000}
+        {"ticker": "AAPL", "trade_date": date(2025, 1, 2), "open_price": 100.0,
+         "high_price": 105.0, "low_price": 98.0, "close_price": 102.0, "volume": 1_000_000}
     ])
 
 
-@patch("lambda_function.write_parquet", return_value="prices/year=2025/month=04/day=11/prices.parquet")
+@patch("lambda_function.write_parquet", return_value="prices/y=2025/m=04/d=11/prices.parquet")
 @patch("lambda_function.fetch_prices", return_value=_sample_df())
 @patch("lambda_function.is_first_run", return_value=False)
 @patch("lambda_function.read_holdings", return_value=[{"ticker": "AAPL", "qty": 10, "avg_cost": 150.0}])
@@ -39,7 +39,7 @@ def test_handler_skips_on_holiday(mock_read, mock_first, mock_fetch):
     assert result == {"status": "skipped", "reason": "no_data"}
 
 
-@patch("lambda_function.write_parquet", return_value="prices/year=2025/month=04/day=11/prices.parquet")
+@patch("lambda_function.write_parquet", return_value="prices/y=2025/m=04/d=11/prices.parquet")
 @patch("lambda_function.fetch_prices", return_value=_sample_df())
 @patch("lambda_function.is_first_run", return_value=True)
 @patch("lambda_function.read_holdings", return_value=[{"ticker": "AAPL", "qty": 10, "avg_cost": 150.0}])

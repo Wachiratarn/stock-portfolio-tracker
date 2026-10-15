@@ -28,13 +28,13 @@ def fetch_prices(tickers: list[str], period: str = "1y") -> pd.DataFrame:
                 continue
             rows.append(
                 {
-                    "ticker": ticker,
-                    "date": ts.date(),
-                    "open": round(float(row["Open"]), 4),
-                    "high": round(float(row["High"]), 4),
-                    "low": round(float(row["Low"]), 4),
-                    "close": round(float(row["Close"]), 4),
-                    "volume": int(row["Volume"]),
+                    "ticker":      ticker,
+                    "trade_date":  ts.date(),
+                    "open_price":  round(float(row["Open"]), 4),
+                    "high_price":  round(float(row["High"]), 4),
+                    "low_price":   round(float(row["Low"]), 4),
+                    "close_price": round(float(row["Close"]), 4),
+                    "volume":      int(row["Volume"]),
                 }
             )
 

@@ -27,7 +27,7 @@ def _make_ohlcv(n: int = 5) -> pd.DataFrame:
 def test_fetch_prices_single_ticker_returns_correct_columns(mock_dl):
     mock_dl.return_value = _make_ohlcv(5)
     result = fetch_prices(["AAPL"], period="5d")
-    assert list(result.columns) == ["ticker", "date", "open", "high", "low", "close", "volume"]
+    assert list(result.columns) == ["ticker", "trade_date", "open_price", "high_price", "low_price", "close_price", "volume"]
 
 
 @patch("prices.yf.download")
